@@ -1,33 +1,28 @@
-import React from 'react';
-import { useFetchGifs } from '../hooks/useFetchGifs';
-// import { getGifs } from '../helpers/getGifs';
-import GiftGridItem from './GiftGridItem';
+import React from "react";
+import { useFetchGifs } from "../hooks/useFetchGifs";
+import GiftGridItem from "./GiftGridItem";
+import PropTypes from "prop-types";
 
-const GifGrid = ({category}) => {
+const GifGrid = ({ category }) => {
+  const { data: images, loading } = useFetchGifs(category);
 
-    const { data:images, loading } = useFetchGifs(category);
+  return (
+    <>
+      <h3>{category}</h3>
 
-    return (
-        <>
-            <h3>{ category }</h3>
+      {loading && <p>Cargando...</p>}
 
-            { loading && <p>Cargando...</p>}
+      <div className="card-grid">
+        {images.map((img) => (
+          <GiftGridItem key={img.id} {...img} />
+        ))}
+      </div>
+    </>
+  );
+};
 
-            <div className='card-grid'>
-           
-            {
-                images.map( img  =>
-                    <GiftGridItem 
-                        key={ img.id }
+GifGrid.propTypes = {
+  category: PropTypes.string.isRequired,
+};
 
-                        // envia cada propiedad de manera independiente
-                        { ...img }
-                    />
-                )
-            }
-            </div>
-        </>
-    )
-}
-
-export default GifGrid
+export default GifGrid;
